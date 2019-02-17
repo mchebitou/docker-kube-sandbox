@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-kube-sandbox
+  labels:
+    name: docker-kube-sandbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: docker-kube-sandbox
+  template:
+    metadata:
+      labels:
+        name: docker-kube-sandbox
+    spec:
+      containers:
+      - name: docker-kube-sandbox
+        image: mchebitou/docker-kube-sandbox:1.0.0
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            cpu: 100m
+            memory: 50Mi
+          requests:
+            cpu: 100m
+            memory: 10Mi
+        env:
+        - name: SIAB_USER
+          valueFrom:
+            secretKeyRef:
+              name: docker-kube-sandbox
+              key: username
+        - name: SIAB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: docker-kube-sandbox
+              key: password
+        - name: SIAB_SSL
+          value: "false"
+        - name: SIAB_HOME
+          value: "/home/docker"
+        ports:
+        - containerPort: 4200
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+          readOnly: true
+        - mountPath: /etc/sudoers
+          name: sudoers
+          subPath: sudoers
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 4200
+          initialDelaySeconds: 300
+          timeoutSeconds: 30
+      volumes:
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+          type: File
+      - name: sudoers
+        configMap:
+          name: docker-kube-sandbox
+          items:
+          - key: sudoers
+            path: sudoers

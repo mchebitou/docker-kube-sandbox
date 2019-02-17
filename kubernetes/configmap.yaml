@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: docker-kube-sandbox
+data:
+  sudoers: "## sudoers file.\n##\n## This file MUST be edited with the 'visudo' command
+    as root.\n## Failure to use 'visudo' may result in syntax or file permission errors\n##
+    that prevent sudo from running.\n##\n## See the sudoers man page for the details
+    on how to write a sudoers file.\n##\n\n##\n## Host alias specification\n##\n##
+    Groups of machines. These may include host names (optionally with wildcards),\n##
+    IP addresses, network numbers or netgroups.\n# Host_Alias    WEBSERVERS = www1,
+    www2, www3\n\n##\n## User alias specification\n##\n## Groups of users.  These
+    may consist of user names, uids, Unix groups,\n## or netgroups.\n# User_Alias
+    \   ADMINS = millert, dowdy, mikef\n\n##\n## Cmnd alias specification\n##\n##
+    Groups of commands.  Often used to group related commands together.\n# Cmnd_Alias
+    \   PROCESSES = /usr/bin/nice, /bin/kill, /usr/bin/renice, \\\n#                           /usr/bin/pkill,
+    /usr/bin/top\n# Cmnd_Alias    REBOOT = /sbin/halt, /sbin/reboot, /sbin/poweroff\n\n##\n##
+    Defaults specification\n##\n## You may wish to keep some of the following environment
+    variables\n## when running commands via sudo.\n##\n## Locale settings\n# Defaults
+    env_keep += \"LANG LANGUAGE LINGUAS LC_* _XKB_CHARSET\"\n##\n## Run X applications
+    through sudo; HOME is used to find the\n## .Xauthority file.  Note that other
+    programs use HOME to find\n## configuration files and this may lead to privilege
+    escalation!\n# Defaults env_keep += \"HOME\"\n##\n## X11 resource path settings\n#
+    Defaults env_keep += \"XAPPLRESDIR XFILESEARCHPATH XUSERFILESEARCHPATH\"\n##\n##
+    Desktop path settings\n# Defaults env_keep += \"QTDIR KDEDIR\"\n##\n## Allow sudo-run
+    commands to inherit the callers' ConsoleKit session\n# Defaults env_keep += \"XDG_SESSION_COOKIE\"\n##\n##
+    Uncomment to enable special input methods.  Care should be taken as\n## this may
+    allow users to subvert the command being run via sudo.\n# Defaults env_keep +=
+    \"XMODIFIERS GTK_IM_MODULE QT_IM_MODULE QT_IM_SWITCHER\"\n##\n## Uncomment to
+    use a hard-coded PATH instead of the user's to find commands\n# Defaults secure_path=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"\n##\n##
+    Uncomment to send mail if the user does not enter the correct password.\n# Defaults
+    mail_badpass\n##\n## Uncomment to enable logging of a command's output, except
+    for\n## sudoreplay and reboot.  Use sudoreplay to play back logged sessions.\n#
+    Defaults log_output\n# Defaults!/usr/bin/sudoreplay !log_output\n# Defaults!/usr/local/bin/sudoreplay
+    !log_output\n# Defaults!REBOOT !log_output\n\n##\n## Runas alias specification\n##\n\n##\n##
+    User privilege specification\n##\nroot ALL=(ALL) ALL\n\n## Uncomment to allow
+    members of group wheel to execute any command\n# %wheel ALL=(ALL) ALL\n\n## Same
+    thing without a password\n# %wheel ALL=(ALL) NOPASSWD: ALL\n\n## Uncomment to
+    allow members of group sudo to execute any command\n# %sudo ALL=(ALL) ALL\n\n##
+    Uncomment to allow any user to run sudo if they know the password\n## of the user
+    they are running the command as (root by default).\n# Defaults targetpw  # Ask
+    for the password of the target user\n# ALL ALL=(ALL) ALL  # WARNING: only use
+    this together with 'Defaults targetpw'\n\n## Read drop-in files from /etc/sudoers.d\n##
+    (the '#' here does not indicate a comment)\n#includedir /etc/sudoers.d\n#%wheel
+    ALL=(ALL) ALL\ndocker\tALL = NOPASSWD: /usr/local/bin/docker version\ndocker\tALL
+    = NOPASSWD: /usr/local/bin/docker build *\ndocker\tALL = NOPASSWD: /usr/local/bin/docker
+    login *\ndocker\tALL = NOPASSWD: /usr/local/bin/docker logout *\ndocker\tALL =
+    NOPASSWD: /usr/local/bin/docker pull *\ndocker\tALL = NOPASSWD: /usr/local/bin/docker
+    push *\ndocker\tALL = NOPASSWD: /usr/local/bin/docker tag *\ndocker  ALL = NOPASSWD:
+    /usr/local/bin/docker images\n"
