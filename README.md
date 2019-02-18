@@ -14,7 +14,7 @@ rebased it on [Docker official image](https://hub.docker.com/_/docker) and adapt
     $ kubectl apply -f kubernetes/deployment.yaml
     $ kubectl apply -f kubernetes/service.yaml
 
-Default credentials to login are :
+Default credentials to be used for login are :
 
     username: docker
     password: secret
